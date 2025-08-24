@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { DocumentArrowUpIcon, DocumentTextIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { PDFParser } from '../utils/pdfParser';
 
 const PDFUploader = ({ onPDFProcessed }) => {
   const [dragActive, setDragActive] = useState(false);
@@ -44,33 +45,25 @@ const PDFUploader = ({ onPDFProcessed }) => {
     setError(null);
 
     try {
-      // Simulate PDF processing - in a real app, you'd use a PDF parsing library
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const parser = new PDFParser();
       
-      // Mock extracted schedule data
-      const mockScheduleData = {
-        courses: [
-          { id: 1, name: 'Mathematics 101', code: 'MATH101', instructor: 'Dr. Smith', credits: 3 },
-          { id: 2, name: 'Physics 201', code: 'PHYS201', instructor: 'Prof. Johnson', credits: 4 },
-          { id: 3, name: 'Chemistry 150', code: 'CHEM150', instructor: 'Dr. Brown', credits: 3 },
-          { id: 4, name: 'English Literature', code: 'ENG200', instructor: 'Ms. Davis', credits: 3 },
-          { id: 5, name: 'Computer Science', code: 'CS101', instructor: 'Dr. Wilson', credits: 4 }
-        ],
-        schedule: [
-          { courseId: 1, day: 'Monday', startTime: '09:00', endTime: '10:30', room: 'Room 101' },
-          { courseId: 1, day: 'Wednesday', startTime: '09:00', endTime: '10:30', room: 'Room 101' },
-          { courseId: 2, day: 'Tuesday', startTime: '11:00', endTime: '12:30', room: 'Lab 201' },
-          { courseId: 2, day: 'Thursday', startTime: '11:00', endTime: '12:30', room: 'Lab 201' },
-          { courseId: 3, day: 'Monday', startTime: '14:00', endTime: '15:30', room: 'Lab 150' },
-          { courseId: 3, day: 'Friday', startTime: '14:00', endTime: '15:30', room: 'Lab 150' },
-          { courseId: 4, day: 'Tuesday', startTime: '13:00', endTime: '14:30', room: 'Room 200' },
-          { courseId: 5, day: 'Wednesday', startTime: '15:00', endTime: '16:30', room: 'Computer Lab' }
-        ]
-      };
+      // Extract text from PDF
+      const extractedText = await parser.extractTextFromPDF(file);
+      
+      // Parse the extracted text into structured schedule data
+      const scheduleData = parser.parseScheduleData(extractedText);
+      
+      console.log('PDFUploader parsed schedule data:', scheduleData);
+      
+      // Validate that we have some data
+      if (!scheduleData.courses || scheduleData.courses.length === 0) {
+        throw new Error('No course information found in the PDF');
+      }
 
-      onPDFProcessed(mockScheduleData);
+      onPDFProcessed(scheduleData);
     } catch (err) {
-      setError('Failed to process PDF. Please try again.');
+      console.error('PDF processing error:', err);
+      setError(err.message || 'Failed to process PDF. Please try again.');
     } finally {
       setIsProcessing(false);
     }
@@ -79,9 +72,9 @@ const PDFUploader = ({ onPDFProcessed }) => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6">
       <div className="text-center mb-6 sm:mb-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Upload Your Class Schedule</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Upload Your COR</h2>
         <p className="text-base sm:text-lg text-gray-600 px-4 sm:px-0">
-          Upload a PDF of your class schedule and we'll extract the information to create a beautiful, customizable schedule design.
+          Upload a PDF of your COR and we'll extract the information to create a beautiful, customizable schedule design.
         </p>
       </div>
 

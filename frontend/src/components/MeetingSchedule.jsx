@@ -9,10 +9,58 @@ import {
   BellIcon
 } from '@heroicons/react/24/outline';
 
-const MeetingSchedule = () => {
+const MeetingSchedule = ({ scheduleData }) => {
   const [selectedFilter, setSelectedFilter] = useState('all');
   
-  const upcomingMeetings = [
+  // Convert schedule data to meeting format
+  const generateMeetingsFromSchedule = (data) => {
+    if (!data || !data.courses || !data.schedule) {
+      return [];
+    }
+    
+    const meetings = [];
+    const today = new Date();
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    
+    data.schedule.forEach((scheduleItem, index) => {
+      const course = data.courses.find(c => c.id === scheduleItem.courseId);
+      if (!course) return;
+      
+      // Calculate next occurrence of this day
+      const targetDayIndex = daysOfWeek.indexOf(scheduleItem.day);
+      const todayIndex = today.getDay();
+      let daysUntil = targetDayIndex - todayIndex;
+      if (daysUntil < 0) daysUntil += 7;
+      
+      const meetingDate = new Date(today);
+      meetingDate.setDate(today.getDate() + daysUntil);
+      
+      let dateLabel = 'Today';
+      if (daysUntil === 1) dateLabel = 'Tomorrow';
+      else if (daysUntil > 1) dateLabel = scheduleItem.day;
+      
+      meetings.push({
+        id: index + 1,
+        title: `${course.name} - ${course.code}`,
+        time: `${scheduleItem.startTime} - ${scheduleItem.endTime}`,
+        date: dateLabel,
+        location: scheduleItem.room || 'TBA',
+        instructor: course.instructor,
+        type: 'class',
+        isOnline: false,
+        status: 'upcoming',
+        meetLink: null,
+        credits: course.credits
+      });
+    });
+    
+    return meetings.sort((a, b) => {
+      const order = { 'Today': 0, 'Tomorrow': 1 };
+      return (order[a.date] || 2) - (order[b.date] || 2);
+    });
+  };
+  
+  const upcomingMeetings = scheduleData ? generateMeetingsFromSchedule(scheduleData) : [
     {
       id: 1,
       title: 'Study Group - Calculus II',

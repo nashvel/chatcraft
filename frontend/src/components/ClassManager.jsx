@@ -9,17 +9,60 @@ import {
 } from '@heroicons/react/24/outline';
 import { VideoCameraIcon as VideoCameraIconSolid } from '@heroicons/react/24/solid';
 
-const ClassManager = ({ navigationManager }) => {
+const ClassManager = ({ navigationManager, scheduleData }) => {
   const [classes, setClasses] = useState([]);
   const [upcomingClasses, setUpcomingClasses] = useState([]);
   const [editingClass, setEditingClass] = useState(null);
   const [meetLink, setMeetLink] = useState('');
   const [notificationMinutes, setNotificationMinutes] = useState(10);
 
-  useEffect(() => {
-    if (navigationManager) {
-      setClasses(navigationManager.getAllClasses());
+  // Convert schedule data to class management format
+  const generateClassesFromSchedule = (data) => {
+    if (!data || !data.courses || !data.schedule) {
+      return [];
+    }
+    
+    const classMap = new Map();
+    
+    // Group schedule items by course
+    data.schedule.forEach(scheduleItem => {
+      const course = data.courses.find(c => c.id === scheduleItem.courseId);
+      if (!course) return;
       
+      const classKey = course.id;
+      if (!classMap.has(classKey)) {
+        classMap.set(classKey, {
+          id: course.id,
+          name: course.name,
+          code: course.code,
+          instructor: course.instructor,
+          credits: course.credits,
+          meetLink: '',
+          notificationMinutes: 10,
+          schedule: []
+        });
+      }
+      
+      classMap.get(classKey).schedule.push({
+        day: scheduleItem.day,
+        startTime: scheduleItem.startTime,
+        endTime: scheduleItem.endTime,
+        room: scheduleItem.room || 'TBA'
+      });
+    });
+    
+    return Array.from(classMap.values());
+  };
+
+  useEffect(() => {
+    if (scheduleData) {
+      const generatedClasses = generateClassesFromSchedule(scheduleData);
+      setClasses(generatedClasses);
+    } else if (navigationManager) {
+      setClasses(navigationManager.getAllClasses());
+    }
+    
+    if (navigationManager) {
       // Check for upcoming classes every minute
       const interval = setInterval(() => {
         const upcoming = navigationManager.checkUpcomingClasses();
@@ -32,7 +75,7 @@ const ClassManager = ({ navigationManager }) => {
 
       return () => clearInterval(interval);
     }
-  }, [navigationManager]);
+  }, [navigationManager, scheduleData]);
 
   const handleToggleOnline = (classId) => {
     const classItem = navigationManager.getClassById(classId);
