@@ -6,6 +6,7 @@ import ClassManager from './components/ClassManager';
 import Header from './components/Header';
 import BottomNavigation from './components/BottomNavigation';
 import Tutorial from './components/Tutorial';
+import DesktopWarningModal from './components/DesktopWarningModal';
 import { NavigationManager } from './utils/navigation';
 
 function App() {
@@ -13,6 +14,8 @@ function App() {
   const [currentStep, setCurrentStep] = useState('upload');
   const [navigationManager, setNavigationManager] = useState(null);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showDesktopWarning, setShowDesktopWarning] = useState(false);
+  const [desktopWarningDismissed, setDesktopWarningDismissed] = useState(false);
 
   useEffect(() => {
     const navManager = new NavigationManager();
@@ -23,7 +26,22 @@ function App() {
     if (!tutorialCompleted) {
       setShowTutorial(true);
     }
-  }, []);
+
+    // Check if device is desktop and warning hasn't been dismissed
+    const checkDesktop = () => {
+      const isDesktop = window.innerWidth >= 1024; // lg breakpoint
+      const warningDismissed = localStorage.getItem('desktop_warning_dismissed');
+      
+      if (isDesktop && !warningDismissed && !desktopWarningDismissed) {
+        setShowDesktopWarning(true);
+      }
+    };
+
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, [desktopWarningDismissed]);
 
   const handlePDFProcessed = (extractedData) => {
     console.log('App.jsx received PDF data:', extractedData);
@@ -48,6 +66,16 @@ function App() {
     if (navigationManager) {
       navigationManager.navigateTo(step);
     }
+  };
+
+  const handleDesktopWarningClose = () => {
+    setShowDesktopWarning(false);
+  };
+
+  const handleUseAnyway = () => {
+    setShowDesktopWarning(false);
+    setDesktopWarningDismissed(true);
+    localStorage.setItem('desktop_warning_dismissed', 'true');
   };
 
   return (
@@ -77,6 +105,11 @@ function App() {
         onClose={() => setShowTutorial(false)}
         onNavigate={handleNavigation}
         currentStep={currentStep}
+      />
+      <DesktopWarningModal
+        isOpen={showDesktopWarning}
+        onClose={handleDesktopWarningClose}
+        onUseAnyway={handleUseAnyway}
       />
     </div>
   );
