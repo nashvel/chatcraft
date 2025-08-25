@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { QuestionMarkCircleIcon, ChevronDownIcon, InformationCircleIcon, ChartBarIcon, ArrowRightIcon, CloudIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const Header = ({ onShowTutorial, onShowAboutUs }) => {
-  const [showStats, setShowStats] = useState(true);
+  const [showStats, setShowStats] = useState(false);
   const [currentView, setCurrentView] = useState('weekly'); // 'weekly' or 'weather'
   const [weatherData, setWeatherData] = useState(null);
   const [showWeatherModal, setShowWeatherModal] = useState(false);
