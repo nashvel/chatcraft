@@ -31,7 +31,8 @@ const AboutUs = ({ onBack }) => {
       id: 2,
       title: "Smart Class Manager",
       description: "Organize and manage your classes with intelligent scheduling and beautiful visual design.",
-      emoji: "🎯",
+      image: "/smart-class1.jpg",
+      hoverImage: "/smart-class2.jpg",
       gradient: "from-green-400 to-green-500",
       textColor: "text-green-100"
     },
@@ -39,7 +40,8 @@ const AboutUs = ({ onBack }) => {
       id: 3,
       title: "Meeting Scheduler",
       description: "Plan and schedule meetings with classmates using your available time slots.",
-      emoji: "⏰",
+      image: "/meetiing-1.png",
+      hoverImage: "/meeting-2.png",
       gradient: "from-yellow-400 to-orange-400",
       textColor: "text-yellow-100"
     }
@@ -75,39 +77,24 @@ const AboutUs = ({ onBack }) => {
     typeText();
   }, [currentPromptIndex, terminalPrompts]);
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <div className="sticky top-0 z-50 bg-gradient-to-r from-purple-400 via-pink-300 to-blue-400">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={onBack}
-                className="text-white/70 hover:text-white transition-all duration-300 p-2 rounded-full hover:bg-white/10"
-              >
-                <ArrowLeftIcon className="w-6 h-6" />
-              </button>
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 rounded-full border-2 border-white/30 p-0.5">
-                  <img 
-                    src="/icon.png" 
-                    alt="Timely" 
-                    className="w-full h-full rounded-full object-cover"
-                  />
-                </div>
-                <h1 className="text-xl font-medium text-white">Timely</h1>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      {/* Back Button */}
+      <div className="container mx-auto px-4 pt-4">
+        <button
+          onClick={onBack}
+          className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors mb-4"
+        >
+          <ArrowLeftIcon className="w-5 h-5" />
+          <span className="text-sm font-medium">Back</span>
+        </button>
       </div>
 
       {/* Content */}
-      <div className="container mx-auto px-4 py-6 pb-0">
+      <div className="container mx-auto px-4 py-2 pb-0">
         <div className="max-w-md mx-auto">
           {/* Subtitle */}
           <div className="text-center mb-6">
-            <p className="text-gray-700 text-lg font-medium">
+            <p className="text-gray-700 dark:text-gray-300 text-lg font-medium">
               Lightweight demos and experiments designed for fun
             </p>
           </div>
@@ -210,37 +197,37 @@ const AboutUs = ({ onBack }) => {
 
           {/* Developers Section */}
           <div className="mt-8">
-            <h3 className="text-center text-gray-700 text-lg font-semibold mb-4">Meet Our Team</h3>
+            <h3 className="text-center text-gray-700 dark:text-gray-300 text-lg font-semibold mb-4">Meet Our Team</h3>
             <div className="grid grid-cols-3 gap-4">
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-2">
                   <span className="text-white text-xl font-bold">B</span>
                 </div>
-                <p className="text-gray-700 text-sm font-medium">Brandon</p>
-                <p className="text-gray-500 text-xs">Developer</p>
+                <p className="text-gray-700 dark:text-gray-300 text-sm font-medium">Brandon</p>
+                <p className="text-gray-500 dark:text-gray-400 text-xs">Developer</p>
               </div>
               
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-2">
                   <span className="text-white text-xl font-bold">N</span>
                 </div>
-                <p className="text-gray-700 text-sm font-medium">Nacht</p>
-                <p className="text-gray-500 text-xs">Developer</p>
+                <p className="text-gray-700 dark:text-gray-300 text-sm font-medium">Nacht</p>
+                <p className="text-gray-500 dark:text-gray-400 text-xs">Developer</p>
               </div>
               
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-2">
                   <span className="text-white text-xl font-bold">H</span>
                 </div>
-                <p className="text-gray-700 text-sm font-medium">Hazel</p>
-                <p className="text-gray-500 text-xs">Developer</p>
+                <p className="text-gray-700 dark:text-gray-300 text-sm font-medium">Hazel</p>
+                <p className="text-gray-500 dark:text-gray-400 text-xs">Developer</p>
               </div>
             </div>
           </div>
 
           {/* Footer */}
-          <div className="text-center mt-8 pt-6 border-t border-gray-200 pb-0">
-            <p className="text-gray-500 text-sm mb-0">Made with ❤️ for students</p>
+          <div className="text-center mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 pb-0">
+            <p className="text-gray-500 dark:text-gray-400 text-sm mb-0">Made with ❤️ for students</p>
           </div>
         </div>
       </div>

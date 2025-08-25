@@ -127,10 +127,10 @@ const ClassManager = ({ navigationManager, scheduleData }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 min-h-screen bg-white dark:bg-gray-900">
       <div className="text-center mb-6 sm:mb-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Manage Classes</h2>
-        <p className="text-base sm:text-lg text-gray-600">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">Manage Classes</h2>
+        <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400">
           Set up online class links and notifications
         </p>
       </div>
@@ -139,13 +139,13 @@ const ClassManager = ({ navigationManager, scheduleData }) => {
       {upcomingClasses.length > 0 && (
         <div className="mb-6 space-y-3">
           {upcomingClasses.map((classItem) => (
-            <div key={classItem.classId} className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div key={classItem.classId} className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <BellIcon className="w-6 h-6 text-blue-600" />
+                  <BellIcon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                   <div>
-                    <h3 className="font-semibold text-blue-900">{classItem.courseCode}</h3>
-                    <p className="text-sm text-blue-700">
+                    <h3 className="font-semibold text-blue-900 dark:text-blue-100">{classItem.courseCode}</h3>
+                    <p className="text-sm text-blue-700 dark:text-blue-300">
                       Starting in {classItem.minutesUntilClass} minutes
                     </p>
                   </div>
@@ -153,7 +153,7 @@ const ClassManager = ({ navigationManager, scheduleData }) => {
                 {classItem.meetLink && (
                   <button
                     onClick={() => handleJoinClass(classItem)}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                    className="bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors font-medium"
                   >
                     Join Now
                   </button>
@@ -172,13 +172,13 @@ const ClassManager = ({ navigationManager, scheduleData }) => {
           const isHappening = navigationManager.isClassHappening(classItem);
           
           return (
-            <div key={classId} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6">
+            <div key={classId} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900">{classItem.courseCode}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{classItem.courseCode}</h3>
                     {classItem.isOnline && (
-                      <VideoCameraIconSolid className="w-5 h-5 text-blue-600" />
+                      <VideoCameraIconSolid className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                     )}
                     {isHappening && (
                       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -187,8 +187,8 @@ const ClassManager = ({ navigationManager, scheduleData }) => {
                       </span>
                     )}
                   </div>
-                  <p className="text-gray-600 mb-2">{classItem.courseName}</p>
-                  <div className="flex flex-wrap gap-3 text-sm text-gray-600">
+                  <p className="text-gray-600 dark:text-gray-400 mb-2">{classItem.courseName}</p>
+                  <div className="flex flex-wrap gap-3 text-sm text-gray-600 dark:text-gray-400">
                     <div className="flex items-center space-x-1">
                       <ClockIcon className="w-4 h-4" />
                       <span>{classItem.day}, {formatTime(classItem.startTime)} - {formatTime(classItem.endTime)}</span>
@@ -206,7 +206,7 @@ const ClassManager = ({ navigationManager, scheduleData }) => {
               {isEditing ? (
                 <div className="space-y-4 border-t pt-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Google Meet Link
                     </label>
                     <input
@@ -214,17 +214,17 @@ const ClassManager = ({ navigationManager, scheduleData }) => {
                       value={meetLink}
                       onChange={(e) => setMeetLink(e.target.value)}
                       placeholder="https://meet.google.com/xxx-xxxx-xxx"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Notification (minutes before class)
                     </label>
                     <select
                       value={notificationMinutes}
                       onChange={(e) => setNotificationMinutes(parseInt(e.target.value))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value={5}>5 minutes</option>
                       <option value={10}>10 minutes</option>
@@ -235,13 +235,13 @@ const ClassManager = ({ navigationManager, scheduleData }) => {
                   <div className="flex space-x-3">
                     <button
                       onClick={handleSaveClass}
-                      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                      className="bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
                     >
                       Save
                     </button>
                     <button
                       onClick={() => setEditingClass(null)}
-                      className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                      className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                     >
                       Cancel
                     </button>
@@ -253,8 +253,8 @@ const ClassManager = ({ navigationManager, scheduleData }) => {
                     onClick={() => handleToggleOnline(classId)}
                     className={`flex items-center justify-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
                       classItem.isOnline
-                        ? 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                     }`}
                   >
                     <VideoCameraIcon className="w-4 h-4" />
@@ -265,7 +265,7 @@ const ClassManager = ({ navigationManager, scheduleData }) => {
                     <>
                       <button
                         onClick={() => handleEditClass(classId)}
-                        className="flex items-center justify-center space-x-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                        className="flex items-center justify-center space-x-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                       >
                         <LinkIcon className="w-4 h-4" />
                         <span>Setup Link</span>
@@ -276,8 +276,8 @@ const ClassManager = ({ navigationManager, scheduleData }) => {
                           onClick={() => handleJoinClass(classItem)}
                           className={`flex items-center justify-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
                             isHappening
-                              ? 'bg-green-600 text-white hover:bg-green-700 animate-pulse'
-                              : 'bg-blue-600 text-white hover:bg-blue-700'
+                              ? 'bg-green-600 dark:bg-green-500 text-white hover:bg-green-700 dark:hover:bg-green-600 animate-pulse'
+                              : 'bg-blue-600 dark:bg-blue-500 text-white hover:bg-blue-700 dark:hover:bg-blue-600'
                           }`}
                         >
                           <VideoCameraIcon className="w-4 h-4" />
@@ -295,9 +295,9 @@ const ClassManager = ({ navigationManager, scheduleData }) => {
 
       {classes.length === 0 && (
         <div className="text-center py-12">
-          <ExclamationTriangleIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No Classes Found</h3>
-          <p className="text-gray-600">Upload your schedule first to manage your classes.</p>
+          <ExclamationTriangleIcon className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No Classes Found</h3>
+          <p className="text-gray-600 dark:text-gray-400">Upload your schedule first to manage your classes.</p>
         </div>
       )}
     </div>

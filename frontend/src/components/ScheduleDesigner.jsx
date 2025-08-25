@@ -258,20 +258,20 @@ const ScheduleDesigner = ({ scheduleData, onBack }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-2 sm:p-4 lg:p-6 pb-40 sm:pb-32 md:pb-8 overflow-x-hidden">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-2 sm:p-4 lg:p-6 pb-40 sm:pb-32 md:pb-8 overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col gap-4 sm:gap-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6 sm:mb-8">
             {isShowcase ? (
               <div className="flex items-center space-x-2">
-                <SwatchIcon className="w-5 h-5 text-blue-600" />
-                <span className="text-sm sm:text-base font-medium text-gray-700">Design Showcase</span>
+                <SwatchIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <span className="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">Design Showcase</span>
               </div>
             ) : (
               <button
                 onClick={onBack}
-                className="flex items-center space-x-1 sm:space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
+                className="flex items-center space-x-1 sm:space-x-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
               >
                 <ArrowLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                 <span className="text-sm sm:text-base">Back to Upload</span>
@@ -280,7 +280,7 @@ const ScheduleDesigner = ({ scheduleData, onBack }) => {
             
             <button
               onClick={() => setIsExportModalOpen(true)}
-              className="flex items-center space-x-1 sm:space-x-2 bg-blue-600 text-white px-3 py-2 sm:px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
+              className="flex items-center space-x-1 sm:space-x-2 bg-blue-600 dark:bg-blue-500 text-white px-3 py-2 sm:px-4 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors text-sm sm:text-base"
             >
               <PhotoIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden xs:inline">Export as Image</span>
@@ -291,13 +291,22 @@ const ScheduleDesigner = ({ scheduleData, onBack }) => {
 
           {/* Schedule Preview */}
           <div className="w-full">
-            <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-2 sm:p-3 lg:p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-2 sm:p-3 lg:p-6">
             <div ref={scheduleRef} className={`${styles.container} p-2 sm:p-3 lg:p-6 rounded-lg`} style={{overflow: 'visible'}}>
-              {/* Schedule Header */}
+              {/* Timely Template Header */}
               <div className={`${styles.header} p-3 sm:p-4 rounded-t-lg mb-3 sm:mb-4 flex justify-between items-center`}>
-                <div>
-                  <h2 className={`text-xl sm:text-2xl font-bold ${styles.headerText}`}>My Class Schedule</h2>
-                  <p className={`text-sm sm:text-base ${styles.headerText} opacity-80`}>Fall 2024 Semester</p>
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 rounded-lg border-2 border-white/30 p-0.5">
+                    <img 
+                      src="/icon.png" 
+                      alt="Timely" 
+                      className="w-full h-full rounded-lg object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h2 className={`text-xl sm:text-2xl font-bold ${styles.headerText}`}>Timely</h2>
+                    <p className={`text-sm sm:text-base ${styles.headerText} opacity-80`}>Tagoloan Community College</p>
+                  </div>
                 </div>
                 {displayData && (
                   <button
@@ -339,16 +348,16 @@ const ScheduleDesigner = ({ scheduleData, onBack }) => {
                       if (daySchedule.length === 0) return null;
                       
                       return (
-                        <div key={day} className="bg-white rounded-xl sm:rounded-2xl p-2 sm:p-3 lg:p-4 shadow-lg border border-white/50">
-                          <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-800 mb-1 sm:mb-2 lg:mb-3">{day}</h3>
+                        <div key={day} className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-2 sm:p-3 lg:p-4 shadow-lg border border-white/50 dark:border-gray-600/50">
+                          <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-800 dark:text-gray-200 mb-1 sm:mb-2 lg:mb-3">{day}</h3>
                           <div className="space-y-1 sm:space-y-1.5 lg:space-y-2">
                             {daySchedule.map((classItem, index) => {
                               const course = getCourseById(classItem.courseId);
                               return (
-                                <div key={index} className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                                <div key={index} className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                                   <div className="font-medium">{course?.code || classItem.courseName}</div>
-                                  <div className="text-gray-600">({formatTime12Hour(classItem.startTime)} - {formatTime12Hour(classItem.endTime)})</div>
-                                  <div className="text-gray-600">{classItem.room}</div>
+                                  <div className="text-gray-600 dark:text-gray-400">({formatTime12Hour(classItem.startTime)} - {formatTime12Hour(classItem.endTime)})</div>
+                                  <div className="text-gray-600 dark:text-gray-400">{classItem.room}</div>
                                 </div>
                               );
                             })}
@@ -359,7 +368,7 @@ const ScheduleDesigner = ({ scheduleData, onBack }) => {
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                   <p>Upload a PDF to see your schedule</p>
                 </div>
               )}

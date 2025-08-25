@@ -1,15 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { QuestionMarkCircleIcon, ChevronDownIcon, InformationCircleIcon, ChartBarIcon, ArrowRightIcon, CloudIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { QuestionMarkCircleIcon, ChevronDownIcon, InformationCircleIcon, ChartBarIcon, ArrowRightIcon, CloudIcon, XMarkIcon, SunIcon, MoonIcon } from '@heroicons/react/24/outline';
 
 const Header = ({ onShowTutorial, onShowAboutUs }) => {
   const [showStats, setShowStats] = useState(false);
   const [currentView, setCurrentView] = useState('weekly'); // 'weekly' or 'weather'
   const [weatherData, setWeatherData] = useState(null);
   const [showWeatherModal, setShowWeatherModal] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [animationOrigin, setAnimationOrigin] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     fetchWeatherData();
+    
+    // Load theme preference from localStorage
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    const isDark = savedTheme === 'dark';
+    setIsDarkMode(isDark);
+    
+    // Apply theme to document root
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }, []);
+
+  const toggleTheme = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    
+    setAnimationOrigin({ x, y });
+    setIsAnimating(true);
+    
+    // Start the ripple animation
+    setTimeout(() => {
+      const newTheme = !isDarkMode;
+      setIsDarkMode(newTheme);
+      localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+      
+      // Apply theme to document root
+      if (newTheme) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      
+      // End animation after theme change
+      setTimeout(() => {
+        setIsAnimating(false);
+      }, 800);
+    }, 200);
+  };
 
   const fetchWeatherData = async () => {
     try {
@@ -93,30 +136,72 @@ const Header = ({ onShowTutorial, onShowAboutUs }) => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 sticky top-0 z-50 group">
-      <div className="container mx-auto px-6 py-4 transition-all duration-500 group-hover:py-6">
-        <div className="flex items-center justify-between">
+    <>
+      {/* Water Drop Animation Overlay */}
+      {isAnimating && (
+        <div 
+          className="fixed inset-0 z-50 pointer-events-none"
+          style={{
+            background: `radial-gradient(circle at ${animationOrigin.x}px ${animationOrigin.y}px, 
+              ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'} 0%, 
+              ${isDarkMode ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)'} 30%, 
+              transparent 70%)`,
+            animation: 'ripple 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards'
+          }}
+        />
+      )}
+      
+      <style jsx>{`
+        @keyframes ripple {
+          0% {
+            transform: scale(0);
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.8;
+          }
+          100% {
+            transform: scale(4);
+            opacity: 0;
+          }
+        }
+      `}</style>
+
+      <header className="relative w-full bg-gradient-to-r from-purple-900/20 to-blue-900/20 dark:from-purple-900/20 dark:to-blue-900/20 backdrop-blur-lg border-b border-white/10 dark:border-white/10 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-3 group-hover:scale-105 transition-all duration-500">
-            <div className="w-8 h-8 rounded-full border-2 border-white/30 p-0.5 group-hover:border-white/50 group-hover:shadow-lg transition-all duration-500">
-              <img 
-                src="/icon.png" 
-                alt="Timely" 
-                className="w-full h-full rounded-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
-            </div>
-            <h1 className="text-xl font-medium text-white group-hover:text-white/95 group-hover:tracking-wider transition-all duration-500">
-              Timely
-            </h1>
+            <img 
+              src="/icon.png" 
+              alt="Timely Logo" 
+              className="w-8 h-8 rounded-lg shadow-lg"
+            />
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-white drop-shadow-lg">Timely</h1>
           </div>
           
-          <div className="relative md:hidden">
+          <div className="flex items-center space-x-3">
+            {/* Theme Toggle Button */}
             <button
-              onClick={() => setShowStats(!showStats)}
-              className="text-white/70 hover:text-white transition-all duration-300 p-2 rounded-full hover:bg-white/10"
-              title="Weekly Stats"
+              onClick={toggleTheme}
+              className="p-2 rounded-lg bg-gray-200 hover:bg-gray-300 dark:bg-white/10 dark:hover:bg-white/20 backdrop-blur-lg border border-gray-300 dark:border-white/20 transition-all duration-300 hover:scale-105"
+              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
-              <ChevronDownIcon className={`w-5 h-5 transition-transform duration-300 ${showStats ? 'rotate-180' : ''}`} />
+              {isDarkMode ? (
+                <SunIcon className="w-5 h-5 text-yellow-400" />
+              ) : (
+                <MoonIcon className="w-5 h-5 text-blue-400" />
+              )}
             </button>
+            
+            <div className="relative md:hidden">
+              <button
+                onClick={() => setShowStats(!showStats)}
+                className="text-gray-600 hover:text-gray-800 dark:text-white/70 dark:hover:text-white transition-all duration-300 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-white/10"
+                title="Weekly Stats"
+              >
+                <ChevronDownIcon className={`w-5 h-5 transition-transform duration-300 ${showStats ? 'rotate-180' : ''}`} />
+              </button>
+            </div>
           </div>
 
           {/* Desktop Menu */}
@@ -354,6 +439,7 @@ const Header = ({ onShowTutorial, onShowAboutUs }) => {
         </div>
       )}
     </header>
+    </>
   );
 };
 

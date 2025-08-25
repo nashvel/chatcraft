@@ -23,6 +23,27 @@ function App() {
     const navManager = new NavigationManager();
     setNavigationManager(navManager);
     
+    // Load schedule data from localStorage on app start
+    const savedData = localStorage.getItem('scheduleData');
+    if (savedData) {
+      try {
+        const parsedData = JSON.parse(savedData);
+        setScheduleData(parsedData);
+        navManager.setScheduleData(parsedData);
+      } catch (error) {
+        console.error('Error loading saved schedule data:', error);
+      }
+    }
+    
+    // Load current page from localStorage
+    const savedPage = localStorage.getItem('currentPage');
+    if (savedPage && savedData) {
+      setCurrentStep(savedPage);
+    }
+    
+    // Initialize theme - remove duplicate initialization since Header handles it
+    // Theme is now handled in Header component
+    
     // Check if tutorial should be shown for first-time users
     const tutorialCompleted = localStorage.getItem('tutorial_completed');
     if (!tutorialCompleted) {
@@ -65,6 +86,7 @@ function App() {
   const handleNavigation = (step) => {
     // Allow navigation to all steps for now, we'll handle requirements in the UI
     setCurrentStep(step);
+    localStorage.setItem('currentPage', step);
     if (navigationManager) {
       navigationManager.navigateTo(step);
     }
@@ -81,7 +103,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 pb-16 md:pb-0">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-blue-900 dark:to-indigo-900 pb-16 md:pb-0">
       {showAboutUs ? (
         <AboutUs onBack={() => setShowAboutUs(false)} />
       ) : (
