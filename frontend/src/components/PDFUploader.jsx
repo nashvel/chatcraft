@@ -71,34 +71,66 @@ const PDFUploader = ({ onPDFProcessed }) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 relative">
+    <div className="min-h-screen flex flex-col items-center justify-start pt-8 px-4 sm:px-6 relative">
       {/* Background Logo */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-        <div className="bg-white/90 backdrop-blur-sm rounded-full p-8 shadow-2xl">
-          <img 
-            src="/logo.png" 
-            alt="Timely Logo" 
-            className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 object-contain"
-          />
-        </div>
+        <img 
+          src="/logo.png" 
+          alt="Timely Logo" 
+          className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 object-contain"
+        />
       </div>
       
+      
+      {/* Dashboard Stats */}
+      <div className="relative z-10 w-full max-w-4xl mx-auto mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {/* Online Classes */}
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-4 border border-white/20">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white mb-1">4</div>
+              <div className="text-white/70 text-sm">Online Classes</div>
+              <div className="text-blue-400 text-xs mt-1">Virtual</div>
+            </div>
+          </div>
+          
+          {/* Face to Face Classes */}
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-4 border border-white/20">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white mb-1">6</div>
+              <div className="text-white/70 text-sm">Face to Face Classes</div>
+              <div className="text-green-400 text-xs mt-1">On Campus</div>
+            </div>
+          </div>
+          
+          {/* Upcoming Classes */}
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-4 border border-white/20">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white mb-1">3</div>
+              <div className="text-white/70 text-sm">Upcoming Classes</div>
+              <div className="text-orange-400 text-xs mt-1">Today</div>
+            </div>
+          </div>
+          
+          {/* Next Class Subject */}
+          <div className="bg-yellow-400 backdrop-blur-lg rounded-2xl p-4 border border-yellow-500 relative">
+            <div className="text-center">
+              <div className="text-lg font-bold text-gray-900 mb-1 flex items-center justify-center gap-2">
+                IT 107
+                <svg className="w-4 h-4 text-gray-800 transform rotate-12" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
+                </svg>
+              </div>
+              <div className="text-gray-700 text-sm">Next Subject</div>
+              <div className="text-gray-800 text-xs mt-1">9:00 AM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content */}
       <div className="relative z-10 w-full max-w-md mx-auto">
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">Upload Your COR</h2>
-            <button
-              onClick={() => setShowExtractInfo(!showExtractInfo)}
-              className="text-white/80 hover:text-white transition-colors drop-shadow-lg"
-              title="What can we extract from your PDF?"
-            >
-              <QuestionMarkCircleIcon className="w-6 h-6" />
-            </button>
-          </div>
-          <p className="text-white/90 text-lg drop-shadow-md leading-relaxed">
-            Upload a PDF of your COR and we'll extract the information to create a beautiful, customizable schedule design.
-          </p>
         </div>
 
       <div
