@@ -7,6 +7,7 @@ import Header from './components/Header';
 import BottomNavigation from './components/BottomNavigation';
 import Tutorial from './components/Tutorial';
 import DesktopWarningModal from './components/DesktopWarningModal';
+import AboutUs from './components/AboutUs';
 import { NavigationManager } from './utils/navigation';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
   const [showTutorial, setShowTutorial] = useState(false);
   const [showDesktopWarning, setShowDesktopWarning] = useState(false);
   const [desktopWarningDismissed, setDesktopWarningDismissed] = useState(false);
+  const [showAboutUs, setShowAboutUs] = useState(false);
 
   useEffect(() => {
     const navManager = new NavigationManager();
@@ -79,27 +81,36 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 pb-16 md:pb-0">
-      <Header onShowTutorial={() => setShowTutorial(true)} />
-      <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
-        {currentStep === 'upload' ? (
-          <PDFUploader onPDFProcessed={handlePDFProcessed} />
-        ) : currentStep === 'design' ? (
-          <ScheduleDesigner 
-            scheduleData={scheduleData} 
-            onBack={handleBackToUpload}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 pb-16 md:pb-0">
+      {showAboutUs ? (
+        <AboutUs onBack={() => setShowAboutUs(false)} />
+      ) : (
+        <>
+          <Header 
+            onShowTutorial={() => setShowTutorial(true)} 
+            onShowAboutUs={() => setShowAboutUs(true)}
           />
-        ) : currentStep === 'manage' ? (
-          <ClassManager navigationManager={navigationManager} scheduleData={scheduleData} />
-        ) : (
-          <MeetingSchedule scheduleData={scheduleData} />
-        )}
-      </main>
-      <BottomNavigation 
-        currentStep={currentStep} 
-        onNavigate={handleNavigation}
-        hasScheduleData={!!scheduleData}
-      />
+          <main className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+            {currentStep === 'upload' ? (
+              <PDFUploader onPDFProcessed={handlePDFProcessed} />
+            ) : currentStep === 'design' ? (
+              <ScheduleDesigner 
+                scheduleData={scheduleData} 
+                onBack={handleBackToUpload}
+              />
+            ) : currentStep === 'manage' ? (
+              <ClassManager navigationManager={navigationManager} scheduleData={scheduleData} />
+            ) : (
+              <MeetingSchedule scheduleData={scheduleData} />
+            )}
+          </main>
+          <BottomNavigation 
+            currentStep={currentStep} 
+            onNavigate={handleNavigation}
+            hasScheduleData={!!scheduleData}
+          />
+        </>
+      )}
       <Tutorial 
         isOpen={showTutorial}
         onClose={() => setShowTutorial(false)}
